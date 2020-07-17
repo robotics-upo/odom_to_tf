@@ -21,7 +21,7 @@ class OdomToTF:
     rospy.Subscriber("odom", Odometry, self.odometryCb)
     rospy.Subscriber("imu", Imu, self.imuCb)
     self.laser_frame = rospy.get_param('~laser_frame', 'os1_lidar')
-    self.rotate = rospy.get_param('~rotate_90', False)
+    self.rotate = rospy.get_param('~rotate_90', True)
     listener = tf.TransformListener()
     self.br = tf2_ros.TransformBroadcaster()
 
@@ -37,7 +37,7 @@ class OdomToTF:
           self.lidar_tf = listener.lookupTransform(self.base_link, self.laser_frame, rospy.Time(0))
           frame_catched = True
           self.lidar_tf_pm = pm.fromTf(self.lidar_tf)
-          print "siiiiiiii"
+         
       except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
     
@@ -49,7 +49,7 @@ class OdomToTF:
 
     if self.lidar_tf_pm == None:
       return
-    print "heyyyyyyyyyy"
+  
     t = geometry_msgs.msg.TransformStamped()
     if self.override_stamp:
       t.header.stamp = rospy.Time.now()
@@ -73,8 +73,13 @@ class OdomToTF:
     t.transform.rotation.y = a.orientation.y
     t.transform.rotation.z = a.orientation.z
     t.transform.rotation.w = a.orientation.w
-    t.transform.translation.x = a.position.x
-    t.transform.translation.y = a.position.y
+    if self.rotate:
+    	t.transform.translation.x = -a.position.y
+   	t.transform.translation.y = a.position.x
+    else:
+    	t.transform.translation.x = a.position.x
+    	t.transform.translation.y = a.position.y
+
     t.transform.translation.z = a.position.z
     self.br.sendTransform(t)
 
