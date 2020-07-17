@@ -37,7 +37,7 @@ class OdomToTF:
           self.lidar_tf = listener.lookupTransform(self.base_link, self.laser_frame, rospy.Time(0))
           frame_catched = True
           self.lidar_tf_pm = pm.fromTf(self.lidar_tf)
-         
+          #print "siiiiiiii"
       except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
     
@@ -48,8 +48,9 @@ class OdomToTF:
   def odometryCb(self, msg):
 
     if self.lidar_tf_pm == None:
+      print "Lidar tf not found"
       return
-  
+    #print "heyyyyyyyyyy"
     t = geometry_msgs.msg.TransformStamped()
     if self.override_stamp:
       t.header.stamp = rospy.Time.now()
