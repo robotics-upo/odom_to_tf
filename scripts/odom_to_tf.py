@@ -14,13 +14,12 @@ import tf_conversions.posemath as pm
 class OdomToTF:
   def __init__(self):
     self.last_imu_orientation = None
-    self.base_link = "/base_link"
     self.odometry_frame = rospy.get_param('~odom_frame_id', 'odom')
     self.base_link = rospy.get_param('~base_frame_id', 'base_link')
     self.override_stamp = rospy.get_param('~overridestamp', default=False)
     rospy.Subscriber("odom", Odometry, self.odometryCb)
     rospy.Subscriber("imu", Imu, self.imuCb)
-    self.laser_frame = rospy.get_param('~laser_frame', 'os1_lidar')
+    self.laser_frame = rospy.get_param('~laser_frame', 'os1_lidar') # Useful when the odometry does not uses the same tf as the base_link
     self.rotate = rospy.get_param('~rotate_90', True)
     listener = tf.TransformListener()
     self.br = tf2_ros.TransformBroadcaster()
