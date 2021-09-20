@@ -47,7 +47,7 @@ class OdomToTF:
   def odometryCb(self, msg):
 
     if self.lidar_tf_pm == None:
-      print "Lidar tf not found"
+      print ("Lidar tf not found")
       return
     #print "heyyyyyyyyyy"
     t = geometry_msgs.msg.TransformStamped()
@@ -74,11 +74,11 @@ class OdomToTF:
     t.transform.rotation.z = a.orientation.z
     t.transform.rotation.w = a.orientation.w
     if self.rotate:
-    	t.transform.translation.x = -a.position.y
-   	t.transform.translation.y = a.position.x
+      t.transform.translation.x = -a.position.y
+      t.transform.translation.y = a.position.x
     else:
-    	t.transform.translation.x = a.position.x
-    	t.transform.translation.y = a.position.y
+      t.transform.translation.x = a.position.x
+      t.transform.translation.y = a.position.y
 
     t.transform.translation.z = a.position.z
     self.br.sendTransform(t)
