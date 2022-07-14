@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python3
 import roslib
 roslib.load_manifest('odom_to_tf')
 import rospy
