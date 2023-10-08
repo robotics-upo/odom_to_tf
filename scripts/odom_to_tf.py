@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import roslib
 roslib.load_manifest('odom_to_tf')
 import rospy
@@ -17,6 +17,8 @@ class OdomToTF:
     self.odometry_frame = rospy.get_param('~odom_frame_id', 'odom')
     self.base_link = rospy.get_param('~base_frame_id', 'base_link')
     self.override_stamp = rospy.get_param('~overridestamp', default=False)
+    print( self.odometry_frame)
+    print( self.base_link )
     rospy.Subscriber("odom", Odometry, self.odometryCb)
     rospy.Subscriber("imu", Imu, self.imuCb)
     self.laser_frame = rospy.get_param('~laser_frame', self.base_link) # Useful when the odometry does not uses the same tf as the base_link (example os1_lidar)
