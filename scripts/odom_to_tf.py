@@ -38,7 +38,6 @@ class OdomToTF:
           self.lidar_tf = listener.lookupTransform(self.base_link, self.laser_frame, rospy.Time(0))
           frame_catched = True
           self.lidar_tf_pm = pm.fromTf(self.lidar_tf)
-          #print "siiiiiiii"
       except (tf.LookupException, tf.ConnectivityException, tf.ExtrapolationException):
             continue
     
@@ -51,7 +50,6 @@ class OdomToTF:
     if self.lidar_tf_pm == None:
       print ("Lidar tf not found")
       return
-    #print "heyyyyyyyyyy"
     t = geometry_msgs.msg.TransformStamped()
     if self.override_stamp:
       t.header.stamp = rospy.Time.now()
@@ -84,24 +82,7 @@ class OdomToTF:
 
     t.transform.translation.z = a.position.z
     self.br.sendTransform(t)
-
-    #delta_t = self.last_odom_transform.Inverse() * self.base_link_tf
-    #self.last_published_transform = self.last_published_transform * delta_t
-    #a = pm.toMsg(self.last_published_transform)
-    #if self.last_imu_orientation != None:
-    #  a.orientation = self.last_imu_orientation
-    #  self.last_odom_transform = pm.fromMsg(a)
-    #t.transform.rotation.x = a.orientation.x
-    #t.transform.rotation.y = a.orientation.y
-    #t.transform.rotation.z = a.orientation.z
-    #t.transform.rotation.w = a.orientation.w
-    #t.transform.translation.x = self.last_published_transform[(0,3)]
-    #t.transform.translation.y = self.last_published_transform[(1,3)]
-    #t.transform.translation.z = self.last_published_transform[(2,3)]
-
-    #self.last_odom_transform = self.base_link_tf
-    #self.br.sendTransform(t)
-
+    
   def imuCb(self, msg):
     self.last_imu_orientation = msg.orientation
 
